@@ -14,7 +14,6 @@ namespace Flectar\Fancybox;
 use Flarum\Extend;
 use Flectar\Fancybox\WrapImagesInGallery;
 use Flectar\Fancybox\DefineGalleryTemplate;
-use Flectar\Fancybox\AddExcerptToDiscussion;
 use Flarum\Discussion\Discussion;
 use Flarum\Api\Resource\DiscussionResource;
 use Flarum\Api\Schema;
@@ -26,7 +25,6 @@ return [
 
     (new Extend\Formatter)
         ->configure(DefineGalleryTemplate::class)
-        ->configure(AddExcerptToDiscussion::class)
         ->render(WrapImagesInGallery::class),
 
     (new Extend\ApiResource(DiscussionResource::class))
