@@ -13,8 +13,7 @@ namespace Flectar\Fancybox;
 
 use Flarum\Extend;
 use Flectar\Fancybox\WrapImagesInGallery;
-use Flectar\Fancybox\DefineGalleryTemplate;
-use Flectar\Fancybox\AddExcerptToDiscussion;
+use Flectar\Fancybox\ConfigureFormatter;
 use Flarum\Discussion\Discussion;
 use Flarum\Api\Resource\DiscussionResource;
 use Flarum\Api\Schema;
@@ -25,8 +24,7 @@ return [
         ->css(__DIR__.'/less/forum.less'),
 
     (new Extend\Formatter)
-        ->configure(DefineGalleryTemplate::class)
-        ->configure(AddExcerptToDiscussion::class)
+        ->configure(ConfigureFormatter::class)
         ->render(WrapImagesInGallery::class),
 
     (new Extend\ApiResource(DiscussionResource::class))
