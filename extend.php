@@ -16,6 +16,8 @@ use Flectar\Fancybox\WrapImagesInGallery;
 use Flectar\Fancybox\DefineGalleryTemplate;
 use Flectar\Fancybox\AddExcerptToDiscussion;
 use Flarum\Discussion\Discussion;
+use Flarum\Api\Resource\DiscussionResource;
+use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('forum'))
@@ -27,8 +29,9 @@ return [
         ->configure(AddExcerptToDiscussion::class)
         ->render(WrapImagesInGallery::class),
 
-    (new Extend\Model(Discussion::class))
-        ->attribute('excerpt', function (Discussion $discussion) {
-            return $discussion->firstPost ? $discussion->firstPost->formatContent() : null;
-        }),
+    (new Extend\ApiResource(DiscussionResource::class))
+        ->fields(fn () => [
+            Schema\Str::make('excerpt')
+                ->get(fn (Discussion $discussion) => $discussion->firstPost ? $discussion->firstPost->formatContent() : null),
+        ]),
 ];
