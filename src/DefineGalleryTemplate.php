@@ -16,16 +16,11 @@ class DefineGalleryTemplate
 
         if ($config->tags->exists('IMG')) {
             $tag = $config->tags->get('IMG');
-            $tag->template = <<<'XML'
+            $tag->template = <<<XML
                 <xsl:choose>
-                    <xsl:when test="ancestor::FANCYBOX-GALLERY-ITEM">
+                    <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@src}">
                             <img data-lazy-src="{@src}" alt="{@alt}" loading="lazy"/>
-                        </a>
-                    </xsl:when>
-                    <xsl:when test="ancestor::DISCUSSION-EXCERPT">
-                        <a data-fancybox="excerpt-gallery" href="{@src}">
-                            <img data-lazy-src="{@src}" alt="{@alt}" class="excerpt-image"/>
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
@@ -34,21 +29,16 @@ class DefineGalleryTemplate
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
-XML;
+            XML;
         }
 
         if ($config->tags->exists('UPL-IMAGE-PREVIEW')) {
             $tag = $config->tags->get('UPL-IMAGE-PREVIEW');
-            $tag->template = <<<'XML'
+            $tag->template = <<<XML
                 <xsl:choose>
-                    <xsl:when test="ancestor::FANCYBOX-GALLERY-ITEM">
+                    <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@url}">
                             <img data-lazy-src="{@url}" alt="" loading="lazy"/>
-                        </a>
-                    </xsl:when>
-                    <xsl:when test="ancestor::DISCUSSION-EXCERPT">
-                        <a data-fancybox="excerpt-gallery" href="{@url}">
-                            <img data-lazy-src="{@url}" alt="" class="excerpt-image"/>
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
@@ -57,7 +47,7 @@ XML;
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
-XML;
+            XML;
         }
     }
 }

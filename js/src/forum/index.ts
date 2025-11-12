@@ -17,12 +17,12 @@ app.initializers.add('flectar/flarum-fancybox', () => {
     postBody.children('.fancybox-gallery:not(.fancybox-ready)')
         .addClass('fancybox-ready')
         .each((_, gallery) => {
-          new Carousel(gallery, {
+          Carousel(gallery, {
             Dots: false,
             infinite: false,
             dragFree: false,
             preload: 0,
-          });
+          }).init();
         });
 
     postBody.find('a[data-fancybox]:not(.fancybox-ready)')
@@ -52,7 +52,8 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                 const group = (carouselEl.length > 0 ? carouselEl : postBody).find(`a[data-fancybox="${groupName}"]`).toArray();
                 const startIndex = group.indexOf(el);
 
-                Fancybox.fromNodes(group, {
+                Fancybox.show(group, {
+                  startIndex,
                   Carousel: {
                     infinite: false,
                     preload: 0,
@@ -61,15 +62,14 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                     display: {
                       left: ['infobar'],
                       middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-                      right: ['slideshow', 'fullscreen', 'close'],
+                      right: ['slideshow', 'close'],
                     },
                   },
                   Images: {
-                    initialSize: 'fit' as 'fit',
+                    zoom: true,
                   },
                   dragToClose: true,
                   Hash: false,
-                  startIndex,
                 });
               });
         });
@@ -92,12 +92,12 @@ app.initializers.add('flectar/flarum-fancybox', () => {
     excerptBody.children('.fancybox-gallery:not(.fancybox-ready)')
         .addClass('fancybox-ready')
         .each((_, gallery) => {
-          new Carousel(gallery, {
+          Carousel(gallery, {
             Dots: false,
             infinite: false,
             dragFree: false,
             preload: 0,
-          });
+          }).init();
         });
 
     excerptBody.find('a[data-fancybox]:not(.fancybox-ready)')
@@ -127,7 +127,8 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                 const group = (carouselEl.length > 0 ? carouselEl : excerptBody).find(`a[data-fancybox="${groupName}"]`).toArray();
                 const startIndex = group.indexOf(el);
 
-                Fancybox.fromNodes(group, {
+                Fancybox.show(group, {
+                  startIndex,
                   Carousel: {
                     infinite: false,
                     preload: 0,
@@ -136,15 +137,14 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                     display: {
                       left: ['infobar'],
                       middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-                      right: ['slideshow', 'fullscreen', 'close'],
+                      right: ['slideshow', 'close'],
                     },
                   },
                   Images: {
-                    initialSize: 'fit' as 'fit',
+                    zoom: true,
                   },
                   dragToClose: true,
                   Hash: false,
-                  startIndex,
                 });
               });
         });

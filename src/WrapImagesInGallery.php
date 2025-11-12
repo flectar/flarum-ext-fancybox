@@ -6,34 +6,21 @@ use s9e\TextFormatter\Renderer;
 
 class WrapImagesInGallery
 {
+    const MATCH_IMG_TAGS = '((?:<UPL-IMAGE-PREVIEW[^>]*>(?:(?!<\/UPL-IMAGE-PREVIEW>).)*<\/UPL-IMAGE-PREVIEW>)|(?:<IMG[^>]*>(?:(?!<\/IMG>).)*<\/IMG>))';
+    const MATCH_GALLERY_REGEX = '((?:'.self::MATCH_IMG_TAGS.'(?:\s*(?:<br\/>|<br>|\n)\s*)?){2,})';
+
     public function __invoke(Renderer $renderer, $context, string $xml): string
     {
-        $pattern = '/' .
-            '(?:<[IPr]\s[^>]*>)*' .
-            '(' .
-                '(?:' .
-                    '(?:<IMG[^>]*>(?:<\/IMG>)?|<UPL-IMAGE-PREVIEW[^>]*>(?:<\/UPL-IMAGE-PREVIEW>)?)' .
-                    '(?:\s*<[br]\s*\/?>\s*)*' .
-                '){2,}' .
-            ')' .
-            '(?:<\/[IPr]>)*' .
-            '/s';
+        return preg_replace_callback('/'.self::MATCH_GALLERY_REGEX.'/m', function ($matches) {
+            $images = array_filter(preg_split('/\s*(?:<br\/>|<br>|\n)\s*/', $matches[0]), function($img) {
+                return !empty($img);
+            });
 
-        return preg_replace_callback($pattern, function ($matches) {
-            $imagesBlock = $matches[1];
-            
-            $images = preg_split('/<[br]\s*\/?>/', $imagesBlock);
-            $images = array_filter(array_map('trim', $images));
-
-            if (count($images) < 2) {
-                return $matches[0];
-            }
-
-            $wrappedImages = array_map(function($img) {
-                return '<FANCYBOX-GALLERY-ITEM>' . $img . '</FANCYBOX-GALLERY-ITEM>';
+            $galleryItems = array_map(function($img) {
+                return '<FANCYBOX-GALLERY-ITEM>' . trim($img) . '</FANCYBOX-GALLERY-ITEM>';
             }, $images);
-
-            return '<FANCYBOX-GALLERY>' . implode('', $wrappedImages) . '</FANCYBOX-GALLERY>';
+            
+            return '<FANCYBOX-GALLERY>' . implode('', $galleryItems) . '</FANCYBOX-GALLERY>';
         }, $xml);
     }
 }
