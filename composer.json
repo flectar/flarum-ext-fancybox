@@ -21,7 +21,7 @@
         "forum": "https://discuss.flarum.org/d/29102"
     },
     "require": {
-        "flarum/core": "^1.8.0"
+        "flarum/core": "^2.0.0-beta"
     },
     "autoload": {
         "psr-4": {
