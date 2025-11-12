@@ -46,6 +46,7 @@ app.initializers.add('flectar/flarum-fancybox', () => {
               .on('click', (e) => {
                 e.preventDefault();
                 if (isDragging) return;
+
                 const groupName = link.attr('data-fancybox');
                 const carouselEl = link.closest('.fancybox-gallery');
                 const group = (carouselEl.length > 0 ? carouselEl : postBody).find(`a[data-fancybox="${groupName}"]`).toArray();
@@ -71,7 +72,7 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                   startIndex,
                 });
               });
-    });
+        });
   });
 
   Discussion.prototype.excerpt = Model.attribute<string>('excerpt');
@@ -120,6 +121,7 @@ app.initializers.add('flectar/flarum-fancybox', () => {
               .on('click', (e) => {
                 e.preventDefault();
                 if (isDragging) return;
+
                 const groupName = link.attr('data-fancybox');
                 const carouselEl = link.closest('.fancybox-gallery');
                 const group = (carouselEl.length > 0 ? carouselEl : excerptBody).find(`a[data-fancybox="${groupName}"]`).toArray();
@@ -145,6 +147,6 @@ app.initializers.add('flectar/flarum-fancybox', () => {
                   startIndex,
                 });
               });
-    });
+        });
   });
 });
