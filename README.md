@@ -14,12 +14,12 @@ In order to install the extension, you will need to follow these simple steps.
 #### 📥 Installation
 
 ```
-composer require darkle/fancybox
+composer require flectar/flarum-fancybox
 ```
 #### ♻ Updating
 
 ```
-composer require darkle/fancybox
+composer update flectar/flarum-fancybox
 php flarum cache:clear
 ```
 ### License
@@ -28,14 +28,15 @@ Fancybox v5 is available under the Fancyapps UI license for all applications. Yo
 
 You can explore the license details at fancyapps.com/license and find purchase options at fancyapps.com/pricing.
 
-- darkle/fancybox - [MIT License](https://github.com/iamdarkle/fancybox/blob/main/LICENSE)
+- flectar/flarum-fancybox - [MIT License](https://github.com/flectar/flarum-ext-fancybox/blob/main/LICENSE)
 - Fancybox v5 (You need a Fancybox license for both non-commercial and commercial use) - [Fancyapps UI license](https://fancyapps.com/license)
 
 ### Useful Links
 
+- [Flectar](https://flectar.com/)
 - [Fancyapps Web](https://fancyapps.com/)
 - [Fancyapps GitHub](https://github.com/fancyapps/ui)
 - [Flarum](https://flarum.org/)
-- [GitHub](https://github.com/iamdarkle/fancybox)
+- [GitHub](https://github.com/flectar/flarum-ext-fancybox)
 - [Composer](https://getcomposer.org/)
 - [Packagist](https://packagist.org/)

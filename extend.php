@@ -1,20 +1,20 @@
 <?php
 
 /*
- * This file is part of iamdarkle/fancybox
+ * This file is part of flectar/flarum-fancybox.
  *
- * Copyright (c) 2024 Tomás Romero.
+ * Copyright (c) 2025 Flectar.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Darkle\Fancybox;
+namespace Flectar\Fancybox;
 
 use Flarum\Extend;
-use Darkle\Fancybox\WrapImagesInGallery;
-use Darkle\Fancybox\DefineGalleryTemplate;
-use Darkle\Fancybox\AddExcerptToDiscussion;
+use Flectar\Fancybox\WrapImagesInGallery;
+use Flectar\Fancybox\DefineGalleryTemplate;
+use Flectar\Fancybox\AddExcerptToDiscussion;
 
 return [
     (new Extend\Frontend('forum'))

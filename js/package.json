@@ -1,5 +1,5 @@
 {
-  "name": "@darkle/fancybox",
+  "name": "@flectar/flarum-fancybox",
   "version": "0.0.0",
   "private": true,
   "prettier": "@flarum/prettier-config",

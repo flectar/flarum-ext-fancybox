@@ -1,5 +1,5 @@
 {
-    "name": "darkle/fancybox",
+    "name": "flectar/flarum-fancybox",
     "description": "Fancybox is a touch enabled and responsive tool for displaying images in a 'lightbox' that floats overtop of web page.",
     "type": "flarum-extension",
     "keywords": [
@@ -11,13 +11,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Tomás Romero",
-            "email": "tomasromero@outlook.com"
+            "name": "Flectar",
+            "email": "tomas@flectar.com"
         }
     ],
     "support": {
-        "issues": "https://github.com/iamdarkle/fancybox/issues",
-        "source": "https://github.com/iamdarkle/fancybox",
+        "issues": "https://github.com/flectar/flarum-ext-fancybox/issues",
+        "source": "https://github.com/flectar/flarum-ext-fancybox",
         "forum": "https://discuss.flarum.org/d/29102"
     },
     "require": {
@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Darkle\\Fancybox\\": "src/"
+            "Flectar\\Fancybox\\": "src/"
         }
     },
     "extra": {

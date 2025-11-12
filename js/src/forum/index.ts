@@ -7,7 +7,7 @@ import Model from 'flarum/common/Model';
 
 import {Carousel, Fancybox} from '@fancyapps/ui';
 
-app.initializers.add('darkle/fancybox', () => {
+app.initializers.add('flectar/flarum-fancybox', () => {
   extend(CommentPost.prototype, 'refreshContent', function () {
     if (this.isEditing()) return;
 

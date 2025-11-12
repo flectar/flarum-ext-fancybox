@@ -1,6 +1,6 @@
 <?php
 
-namespace Darkle\Fancybox;
+namespace Flectar\Fancybox;
 
 use s9e\TextFormatter\Renderer;
 use s9e\TextFormatter\Utils;
