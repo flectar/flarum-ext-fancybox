@@ -14,7 +14,6 @@ namespace Flectar\Fancybox;
 use Flarum\Extend;
 use Flectar\Fancybox\WrapImagesInGallery;
 use Flectar\Fancybox\DefineGalleryTemplate;
-use Flectar\Fancybox\AddExcerptToDiscussion;
 
 return [
     (new Extend\Frontend('forum'))
@@ -23,11 +22,5 @@ return [
 
     (new Extend\Formatter)
         ->configure(DefineGalleryTemplate::class)
-        ->configure(AddExcerptToDiscussion::class)
         ->render(WrapImagesInGallery::class),
- 
-    (new Extend\ApiSerializer(\Flarum\Api\Serializer\DiscussionSerializer::class))
-        ->attribute('excerpt', function ($serializer, $discussion) {
-            return $discussion->firstPost ? $discussion->firstPost->formatContent() : null;
-        }),
 ];
