@@ -12,15 +12,15 @@
 namespace Flectar\Fancybox;
 
 use Flarum\Extend;
-use Flectar\Fancybox\WrapImagesInGallery;
-use Flectar\Fancybox\DefineGalleryTemplate;
 
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/less/forum.less'),
-
+    
+    (new Extend\ServiceProvider())
+        ->register(FancyboxServiceProvider::class),
+        
     (new Extend\Formatter)
-        ->configure(DefineGalleryTemplate::class)
         ->render(WrapImagesInGallery::class),
 ];
