@@ -15,7 +15,7 @@ class WrapImagesInGallery
             $images = array_filter(preg_split('/\s*(?:<br\/>|<br>|\n)\s*/', $matches[0]), function($img) {
                 return !empty($img);
             });
-
+            
             $galleryItems = array_map(function($img) {
                 return '<FANCYBOX-GALLERY-ITEM>' . trim($img) . '</FANCYBOX-GALLERY-ITEM>';
             }, $images);

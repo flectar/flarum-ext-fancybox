@@ -1,83 +1,79 @@
 import app from 'flarum/forum/app';
-import {extend} from 'flarum/common/extend';
+import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/forum/components/CommentPost';
 import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
 import Discussion from 'flarum/common/models/Discussion';
 import Model from 'flarum/common/Model';
-
-import {Carousel, Fancybox} from '@fancyapps/ui';
+import { Carousel, Fancybox } from '@fancyapps/ui';
 
 app.initializers.add('flectar/flarum-fancybox', () => {
+  const fancyboxOptions = {
+    Carousel: {
+      infinite: false,
+      preload: 1,
+    },
+    Toolbar: {
+      display: {
+        left: ['infobar'],
+        middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
+        right: ['slideshow', 'close'],
+      },
+    },
+    Images: {
+      zoom: true,
+    },
+    dragToClose: true,
+    Hash: false,
+  };
+
+  const singleImageOptions = {
+    Toolbar: {
+      display: {
+        left: ['infobar'],
+        middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
+        right: ['close'],
+      },
+    },
+    Images: {
+      zoom: true,
+    },
+    dragToClose: true,
+    Hash: false,
+  };
+
+  const carouselOptions = {
+    Dots: false,
+    infinite: false,
+    dragFree: false,
+    preload: 1,
+  };
+
+  function initializeFancybox(container: JQuery) {
+    container.children('.fancybox-gallery:not(.fancybox-ready)')
+      .addClass('fancybox-ready')
+      .each((_, gallery) => {
+        Carousel(gallery, carouselOptions).init();
+        Fancybox.bind(gallery, '[data-fancybox="gallery"]', fancyboxOptions);
+      });
+
+    if (container.find('a[data-fancybox="single"]:not(.fancybox-ready)').length > 0) {
+      container.find('a[data-fancybox="single"]').addClass('fancybox-ready');
+      Fancybox.bind(container[0], '[data-fancybox="single"]', singleImageOptions);
+    }
+  }
+
   extend(CommentPost.prototype, 'refreshContent', function () {
     if (this.isEditing()) return;
 
     const postBody = this.$('.Post-body');
-    if (postBody.length == 0) return;
+    if (postBody.length === 0) return;
 
-    postBody.children('.fancybox-gallery:not(.fancybox-ready)')
-        .addClass('fancybox-ready')
-        .each((_, gallery) => {
-          Carousel(gallery, {
-            Dots: false,
-            infinite: false,
-            dragFree: false,
-            preload: 0,
-          }).init();
-        });
-
-    postBody.find('a[data-fancybox]:not(.fancybox-ready)')
-        .addClass('fancybox-ready')
-        .each((_, el) => {
-          const link = $(el);
-          let isDragging = false;
-          let startX: number, startY: number;
-
-          link
-              .on('mousedown', (e) => {
-                isDragging = false;
-                startX = e.clientX;
-                startY = e.clientY;
-              })
-              .on('mousemove', (e) => {
-                if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
-                  isDragging = true;
-                }
-              })
-              .on('click', (e) => {
-                e.preventDefault();
-                if (isDragging) return;
-
-                const groupName = link.attr('data-fancybox');
-                const carouselEl = link.closest('.fancybox-gallery');
-                const group = (carouselEl.length > 0 ? carouselEl : postBody).find(`a[data-fancybox="${groupName}"]`).toArray();
-                const startIndex = group.indexOf(el);
-
-                Fancybox.show(group, {
-                  startIndex,
-                  Carousel: {
-                    infinite: false,
-                    preload: 0,
-                  },
-                  Toolbar: {
-                    display: {
-                      left: ['infobar'],
-                      middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-                      right: ['slideshow', 'close'],
-                    },
-                  },
-                  Images: {
-                    zoom: true,
-                  },
-                  dragToClose: true,
-                  Hash: false,
-                });
-              });
-        });
+    initializeFancybox(postBody);
   });
 
   Discussion.prototype.excerpt = Model.attribute<string>('excerpt');
 
-  extend(DiscussionListItem.prototype, 'infoItems', function(items) {
+  extend(DiscussionListItem.prototype, 'infoItems', function (items) {
     const excerpt = this.attrs.discussion.excerpt();
     if (excerpt) {
       items.remove('excerpt');
@@ -85,68 +81,10 @@ app.initializers.add('flectar/flarum-fancybox', () => {
     }
   });
 
-  extend(DiscussionListItem.prototype, 'oncreate', function() {
+  extend(DiscussionListItem.prototype, 'oncreate', function () {
     const excerptBody = this.$('.item-excerpt');
-    if (excerptBody.length == 0) return;
+    if (excerptBody.length === 0) return;
 
-    excerptBody.children('.fancybox-gallery:not(.fancybox-ready)')
-        .addClass('fancybox-ready')
-        .each((_, gallery) => {
-          Carousel(gallery, {
-            Dots: false,
-            infinite: false,
-            dragFree: false,
-            preload: 0,
-          }).init();
-        });
-
-    excerptBody.find('a[data-fancybox]:not(.fancybox-ready)')
-        .addClass('fancybox-ready')
-        .each((_, el) => {
-          const link = $(el);
-          let isDragging = false;
-          let startX: number, startY: number;
-
-          link
-              .on('mousedown', (e) => {
-                isDragging = false;
-                startX = e.clientX;
-                startY = e.clientY;
-              })
-              .on('mousemove', (e) => {
-                if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
-                  isDragging = true;
-                }
-              })
-              .on('click', (e) => {
-                e.preventDefault();
-                if (isDragging) return;
-
-                const groupName = link.attr('data-fancybox');
-                const carouselEl = link.closest('.fancybox-gallery');
-                const group = (carouselEl.length > 0 ? carouselEl : excerptBody).find(`a[data-fancybox="${groupName}"]`).toArray();
-                const startIndex = group.indexOf(el);
-
-                Fancybox.show(group, {
-                  startIndex,
-                  Carousel: {
-                    infinite: false,
-                    preload: 0,
-                  },
-                  Toolbar: {
-                    display: {
-                      left: ['infobar'],
-                      middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-                      right: ['slideshow', 'close'],
-                    },
-                  },
-                  Images: {
-                    zoom: true,
-                  },
-                  dragToClose: true,
-                  Hash: false,
-                });
-              });
-        });
+    initializeFancybox(excerptBody);
   });
 });

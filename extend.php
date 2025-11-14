@@ -12,24 +12,15 @@
 namespace Flectar\Fancybox;
 
 use Flarum\Extend;
-use Flectar\Fancybox\WrapImagesInGallery;
-use Flectar\Fancybox\ConfigureFormatter;
-use Flarum\Discussion\Discussion;
-use Flarum\Api\Resource\DiscussionResource;
-use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/less/forum.less'),
-
+    
+    (new Extend\ServiceProvider())
+        ->register(FancyboxServiceProvider::class),
+        
     (new Extend\Formatter)
-        ->configure(ConfigureFormatter::class)
         ->render(WrapImagesInGallery::class),
-
-    (new Extend\ApiResource(DiscussionResource::class))
-        ->fields(fn () => [
-            Schema\Str::make('excerpt')
-                ->get(fn (Discussion $discussion) => $discussion->firstPost ? $discussion->firstPost->formatContent() : null),
-        ]),
 ];
