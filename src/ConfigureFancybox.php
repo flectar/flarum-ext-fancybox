@@ -8,11 +8,24 @@ class ConfigureFancybox
 {
     public function __invoke(Configurator $config)
     {
-        $tag = $config->tags->add('FANCYBOX-GALLERY');
-        $tag->template = '<div class="fancybox-gallery f-carousel"><xsl:apply-templates/></div>';
+        // TODO: Lazyload transparent placeholder
+        if (!$config->tags->exists('FANCYBOX-GALLERY')) {
+            $tag = $config->tags->add('FANCYBOX-GALLERY');
+            $tag->template = '<div class="fancybox-gallery f-carousel"><xsl:apply-templates/></div>';
+        }
 
-        $tag = $config->tags->add('FANCYBOX-GALLERY-ITEM');
-        $tag->template = '<div class="f-carousel__slide"><xsl:apply-templates/></div>';
+        if (!$config->tags->exists('FANCYBOX-GALLERY-ITEM')) {
+            $tag = $config->tags->add('FANCYBOX-GALLERY-ITEM');
+            $tag->template = '<div class="f-carousel__slide"><xsl:apply-templates/></div>';
+        }
+
+        if (!$config->tags->exists('FANCYBOX-IMG')) {
+            $tag = $config->tags->add('FANCYBOX-IMG');
+            $tag->attributes->add('src');
+            $tag->attributes->add('alt');
+            $tag->attributes->add('title');
+            $tag->template = '<a data-fancybox="gallery" href="{@src}"><img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" /></a>';
+        }
 
         if ($config->tags->exists('IMG')) {
             $tag = $config->tags->get('IMG');
@@ -20,17 +33,17 @@ class ConfigureFancybox
                 <xsl:choose>
                     <xsl:when test="ancestor::DISCUSSION-EXCERPT">
                         <a data-fancybox="excerpt-gallery" href="{@src}">
-                            <img data-lazy-src="{@src}" alt="{@alt}" class="excerpt-image"/>
+                            <img src="{@src}" alt="{@title|@alt}" class="excerpt-image"/>
                         </a>
                     </xsl:when>
                     <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@src}">
-                            <img data-lazy-src="{@src}" alt="{@alt}" loading="lazy"/>
+                            <img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" />
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
                         <a data-fancybox="single" href="{@src}">
-                            <img src="{@src}" alt="{@alt}" loading="lazy"/>
+                            <img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" loading="lazy"/>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -43,17 +56,17 @@ XML;
                 <xsl:choose>
                     <xsl:when test="ancestor::DISCUSSION-EXCERPT">
                         <a data-fancybox="excerpt-gallery" href="{@url}">
-                            <img data-lazy-src="{@url}" alt="" class="excerpt-image"/>
+                            <img src="{@url}" alt="" class="excerpt-image"/>
                         </a>
                     </xsl:when>
                     <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@url}">
-                            <img data-lazy-src="{@url}" alt="" loading="lazy"/>
+                            <img data-lazy-src="{@url}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
                         <a data-fancybox="single" href="{@url}">
-                            <img src="{@url}" alt="" loading="lazy"/>
+                            <img data-lazy-src="{@url}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" loading="lazy"/>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
