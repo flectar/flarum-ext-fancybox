@@ -3,7 +3,6 @@
 namespace Flectar\Fancybox;
 
 use s9e\TextFormatter\Renderer;
-use s9e\TextFormatter\Utils;
 
 class WrapImagesInGallery
 {
@@ -16,7 +15,11 @@ class WrapImagesInGallery
             $images = array_filter(preg_split('/\s*(?:<br\/>|<br>|\n)\s*/', $matches[0]), function($img) {
                 return !empty($img);
             });
+            
             $galleryItems = array_map(function($img) {
+                if (strpos($img, '<IMG') !== false) {
+                    $img = str_replace(['<IMG', '</IMG>'], ['<FANCYBOX-IMG', '</FANCYBOX-IMG>'], $img);
+                }
                 return '<FANCYBOX-GALLERY-ITEM>' . trim($img) . '</FANCYBOX-GALLERY-ITEM>';
             }, $images);
             
