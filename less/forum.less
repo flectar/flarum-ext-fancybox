@@ -13,6 +13,27 @@
 }
 
 a[data-fancybox="single"], a[data-fancybox="gallery"] {
-    display: flex; 
+    display: flex;
     border-bottom: none !important;
+}
+
+/* Excerpt Image Styling */
+.item-excerpt .fancybox-ready, .item-excerpt .fancybox-gallery {
+        height: 600px;
+        width: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 0!important;
+        vertical-align: middle;
+}
+
+.DiscussionListItem-info .item-excerpt  {
+        margin-right: 0!important;
+}
+
+
+.item-excerpt {
+position: relative;
+    overflow: hidden;
 }
