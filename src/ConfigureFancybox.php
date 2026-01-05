@@ -43,7 +43,7 @@ class ConfigureFancybox
                     </xsl:when>
                     <xsl:otherwise>
                         <a data-fancybox="single" href="{@src}">
-                            <img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" loading="lazy"/>
+                            <img src="{@src}" alt="{@title|@alt}" loading="lazy"/>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -66,7 +66,7 @@ XML;
                     </xsl:when>
                     <xsl:otherwise>
                         <a data-fancybox="single" href="{@url}">
-                            <img data-lazy-src="{@url}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" loading="lazy"/>
+                            <img src="{@url}" alt="" loading="lazy"/>
                         </a>
                     </xsl:otherwise>
                 </xsl:choose>
