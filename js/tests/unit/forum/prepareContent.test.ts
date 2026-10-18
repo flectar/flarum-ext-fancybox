@@ -43,6 +43,26 @@ describe('prepareContent: single images', () => {
     expect(out.querySelectorAll('a')).toHaveLength(1);
   });
 
+  it('opens a fof/upload preview without a thumbnail (thumbnails off, or an older upload)', () => {
+    // fof/upload falls back to thumbnail_url = url, so the link and the image point at the same file.
+    const out = prepare(`<p>${upload('http://a/orig.png', 'http://a/orig.png')}</p>`);
+    const link = out.querySelector('a')!;
+
+    expect(link.getAttribute('href')).toBe('http://a/orig.png');
+    expect(link.getAttribute('data-fancybox')).toBe(GROUP);
+    expect(out.querySelectorAll('a')).toHaveLength(1);
+  });
+
+  it('opens the bare-image fof/upload preview from 1.x and the 2.0 betas', () => {
+    const out = prepare(
+      '<p><img class="FoFUpload--Upl-Image-Preview" src="http://a/orig.png" title="a.png" alt="a.png" data-id="u1" loading="lazy" width="10" height="10"></p>'
+    );
+    const link = out.querySelector('a[data-fancybox]')!;
+
+    expect(link.getAttribute('href')).toBe('http://a/orig.png');
+    expect(link.querySelector('img.FoFUpload--Upl-Image-Preview')).not.toBeNull();
+  });
+
   it('ignores a fof/upload preview with no URL', () => {
     const html = `<p>${upload('', '')}</p>`;
 
