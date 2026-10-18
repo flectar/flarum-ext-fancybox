@@ -4,21 +4,20 @@
   "private": true,
   "prettier": "@flarum/prettier-config",
   "dependencies": {
-    "@fancyapps/ui": "^6.1.0",
+    "@fancyapps/ui": "^6.1.0"
+  },
+  "devDependencies": {
     "@flarum/prettier-config": "^1.0.0",
-    "flarum-webpack-config": "^3.0.0",
+    "flarum-tsconfig": "^2.0.0",
+    "flarum-webpack-config": "^3.0.6",
+    "prettier": "^3.3.3",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
   },
-  "devDependencies": {
-    "copy-webpack-plugin": "^12.0.2",
-    "flarum-tsconfig": "^2.0.0",
-    "prettier": "^3.3.3",
-    "webpack-merge": "^6.0.1"
-  },
   "scripts": {
-    "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production",
+    "dev": "npm run sync-css && webpack --mode development --watch",
+    "build": "npm run sync-css && webpack --mode production",
+    "sync-css": "cp node_modules/@fancyapps/ui/dist/fancybox/fancybox.css node_modules/@fancyapps/ui/dist/carousel/carousel.css ../less/",
     "format": "prettier --write src",
     "format-check": "prettier --check src"
   }

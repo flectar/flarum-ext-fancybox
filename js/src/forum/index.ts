@@ -49,7 +49,8 @@ app.initializers.add('flectar/flarum-fancybox', () => {
   };
 
   function initializeFancybox(container: JQuery) {
-    container.children('.fancybox-gallery:not(.fancybox-ready)')
+    container
+      .children('.fancybox-gallery:not(.fancybox-ready)')
       .addClass('fancybox-ready')
       .each((_, gallery) => {
         Carousel(gallery, carouselOptions).init();
