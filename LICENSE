@@ -23,6 +23,6 @@ SOFTWARE.
 ---
 
 This license covers the code of flectar/flarum-fancybox only. The bundled
-Fancyapps UI library (included in js/dist/ and less/fancybox.css,
-less/carousel.css) is licensed separately under the Fancyapps UI license:
-https://fancyapps.com/license
+Fancyapps UI library (included in js/dist/, less/fancybox.css,
+less/carousel.css and less/carousel.arrows.css) is licensed separately under
+the Fancyapps UI license: https://fancyapps.com/license

@@ -8,6 +8,8 @@
   "compilerOptions": {
     // This will output typings to `dist-typings`
     "declarationDir": "./dist-typings",
+    // Don't pull in every @types package from node_modules (e.g. @types/node via the Jest config).
+    "types": [],
     "paths": {
       "flarum/*": ["../vendor/flarum/core/js/dist-typings/*"]
     }
