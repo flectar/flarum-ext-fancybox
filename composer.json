@@ -21,7 +21,7 @@
         "forum": "https://discuss.flarum.org/d/29102"
     },
     "require": {
-        "flarum/core": "^2.0.0-beta"
+        "flarum/core": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -29,6 +29,9 @@
         }
     },
     "extra": {
+        "branch-alias": {
+            "dev-v2": "3.x-dev"
+        },
         "flarum-extension": {
             "title": "Fancybox",
             "category": "feature",
@@ -41,8 +44,29 @@
         "flarum-cli": {
             "modules": {
                 "githubActions": true,
-                "gitConf": true
+                "gitConf": true,
+                "forum": true,
+                "js": true,
+                "css": true,
+                "prettier": true,
+                "typescript": true,
+                "bundlewatch": false,
+                "backendTesting": false,
+                "admin": false,
+                "locale": false
             }
         }
-    }
+    },
+    "require-dev": {
+        "flarum/phpstan": "^2.0"
+    },
+    "scripts": {
+        "analyse:phpstan": "phpstan analyse",
+        "clear-cache:phpstan": "phpstan clear-result-cache"
+    },
+    "scripts-descriptions": {
+        "analyse:phpstan": "Run static analysis"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
