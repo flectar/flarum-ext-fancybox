@@ -1,12 +1,14 @@
 {
     "name": "flectar/flarum-fancybox",
-    "description": "Fancybox is a touch enabled and responsive tool for displaying images in a 'lightbox' that floats overtop of web page.",
+    "description": "Open post images in a zoomable lightbox and show consecutive images as swipeable galleries.",
     "type": "flarum-extension",
     "keywords": [
         "flarum",
         "extension",
         "images",
-        "fancybox"
+        "fancybox",
+        "lightbox",
+        "gallery"
     ],
     "license": "MIT",
     "authors": [
