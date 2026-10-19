@@ -28,7 +28,7 @@ Fancybox v5 is available under the Fancyapps UI license for all applications. Yo
 
 You can explore the license details at fancyapps.com/license and find purchase options at fancyapps.com/pricing.
 
-- flectar/flarum-fancybox - [MIT License](https://github.com/flectar/flarum-ext-fancybox/blob/main/LICENSE)
+- flectar/flarum-fancybox - [MIT License](https://github.com/flectar/flarum-ext-fancybox/blob/1.x/LICENSE)
 - Fancybox v5 (You need a Fancybox license for both non-commercial and commercial use) - [Fancyapps UI license](https://fancyapps.com/license)
 
 ### Useful Links
