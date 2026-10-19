@@ -1,35 +1,10 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import CommentPost from 'flarum/forum/components/CommentPost';
-import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
-import Discussion from 'flarum/common/models/Discussion';
-import Model from 'flarum/common/Model';
 
 import { Carousel, Fancybox } from '@fancyapps/ui';
 
 app.initializers.add('flectar/flarum-fancybox', () => {
-  const isExcerptEnabled = () => {
-    const val = app.forum.attribute('flectar-fancybox.excerpt_enabled');
-    return val === '1' || val === true || val === 1;
-  };
-
-  Discussion.prototype.excerpt = Model.attribute<string>('excerpt');
-
-  extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-    if (!isExcerptEnabled()) return;
-    const excerpt = this.attrs.discussion.excerpt();
-    if (excerpt) {
-      items.remove('excerpt');
-      // @ts-ignore
-      items.add('excerpt', m.trust(excerpt), -100);
-    }
-  });
-
-  extend(DiscussionListItem.prototype, 'oncreate', function () {
-    if (!isExcerptEnabled()) return;
-    initFancybox(this.$('.item-excerpt'));
-  });
-
   extend(CommentPost.prototype, 'refreshContent', function () {
     if (this.isEditing()) return;
     initFancybox(this.$('.Post-body'));

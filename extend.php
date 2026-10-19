@@ -18,18 +18,7 @@ return [
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/less/forum.less'),
 
-    (new Extend\Frontend('admin'))
-        ->js(__DIR__.'/js/dist/admin.js'),
-
     (new Extend\Formatter)
         ->configure(ConfigureFancybox::class)
         ->render(WrapImagesInGallery::class),
-
-    (new Extend\ApiSerializer(\Flarum\Api\Serializer\DiscussionSerializer::class))
-        ->attribute('excerpt', function ($serializer, $discussion) {
-            return $discussion->firstPost ? $discussion->firstPost->formatContent() : null;
-        }),
-
-    (new Extend\Settings())
-        ->serializeToForum('flectar-fancybox.excerpt_enabled', 'flectar-fancybox.excerpt_enabled', 'boolval', false),
 ];

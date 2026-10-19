@@ -31,11 +31,6 @@ class ConfigureFancybox
             $tag = $config->tags->get('IMG');
             $tag->template = <<<'XML'
                 <xsl:choose>
-                    <xsl:when test="ancestor::DISCUSSION-EXCERPT">
-                        <a data-fancybox="excerpt-gallery" href="{@src}">
-                            <img src="{@src}" alt="{@title|@alt}" class="excerpt-image"/>
-                        </a>
-                    </xsl:when>
                     <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@src}">
                             <img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" />
@@ -54,11 +49,6 @@ XML;
             $tag = $config->tags->get('UPL-IMAGE-PREVIEW');
             $tag->template = <<<'XML'
                 <xsl:choose>
-                    <xsl:when test="ancestor::DISCUSSION-EXCERPT">
-                        <a data-fancybox="excerpt-gallery" href="{@url}">
-                            <img src="{@url}" alt="" class="excerpt-image"/>
-                        </a>
-                    </xsl:when>
                     <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
                         <a data-fancybox="gallery" href="{@url}">
                             <img data-lazy-src="{@url}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" />
