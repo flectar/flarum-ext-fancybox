@@ -1,5 +1,5 @@
 # Fancybox v5
-[![Latest Stable Version](http://poser.pugx.org/darkle/fancybox/v)](https://packagist.org/packages/darkle/fancybox) [![Total Downloads](http://poser.pugx.org/darkle/fancybox/downloads)](https://packagist.org/packages/darkle/fancybox)  [![License](http://poser.pugx.org/darkle/fancybox/license)](https://packagist.org/packages/darkle/fancybox)
+[![Latest Stable Version](https://poser.pugx.org/flectar/flarum-fancybox/v)](https://packagist.org/packages/flectar/flarum-fancybox) [![Total Downloads](https://poser.pugx.org/flectar/flarum-fancybox/downloads)](https://packagist.org/packages/flectar/flarum-fancybox) [![License](https://poser.pugx.org/flectar/flarum-fancybox/license)](https://packagist.org/packages/flectar/flarum-fancybox)
 
 ![Screenshot](https://github.com/iamdarkle/assets/blob/main/flarum/fancybox/msedge_RSzIbACInH.gif?raw=true)
 ---
@@ -9,12 +9,12 @@ In order to install the extension, you will need to follow these simple steps.
 
 #### ⚠️ Minimum Requirements
 
-- [flarum/core](https://flarum.org/) 1.2.0
+- [flarum/core](https://flarum.org/) 1.8.0
 
 #### 📥 Installation
 
 ```
-composer require flectar/flarum-fancybox
+composer require flectar/flarum-fancybox:"^2.0"
 ```
 #### ♻ Updating
 
