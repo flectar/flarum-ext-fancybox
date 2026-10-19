@@ -21,7 +21,7 @@ app.initializers.add('flectar/flarum-fancybox', () => {
         const $img = $(this);
         const src = $img.attr('src');
         if (src) {
-          $img.wrap(`<a data-fancybox="single" href="${src}"></a>`);
+          $img.wrap($('<a data-fancybox="single"></a>').attr('href', src));
         }
       });
 
