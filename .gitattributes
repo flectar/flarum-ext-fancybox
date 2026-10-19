@@ -9,6 +9,7 @@
 
 **/phpunit.xml export-ignore
 **/tests export-ignore
+**/phpstan.neon export-ignore
 
 **/js/dist/**/* -diff
 **/js/dist/**/* linguist-generated

@@ -3,13 +3,12 @@
 namespace Flectar\Fancybox;
 
 use Flarum\Foundation\AbstractServiceProvider;
-use Illuminate\Contracts\Container\Container;
 
 class FancyboxServiceProvider extends AbstractServiceProvider
 {
-    public function register()
+    public function register(): void
     {
-        $this->container->resolving('flarum.formatter', function ($formatter, $container) {
+        $this->container->resolving('flarum.formatter', function ($formatter) {
             $formatter->addConfigurationCallback(function ($configurator) {
                 if (!$configurator->tags->exists('FANCYBOX-GALLERY')) {
                     $tag = $configurator->tags->add('FANCYBOX-GALLERY');
@@ -58,10 +57,5 @@ XML;
                 }
             });
         });
-    }
-
-    public function boot(Container $container)
-    {
-
     }
 }

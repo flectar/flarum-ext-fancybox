@@ -13,7 +13,6 @@ jobs:
       frontend_directory: ./js
       backend_directory: .
       js_package_manager: npm
-      main_git_branch: main
-
-    secrets:
-      bundlewatch_github_token: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
+      main_git_branch: v2
+      # The build also refreshes the vendored Fancyapps CSS in less/, so commit it with js/dist.
+      commit_all_dirty: true
