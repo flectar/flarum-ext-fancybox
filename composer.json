@@ -28,6 +28,15 @@
             "Flectar\\Fancybox\\": "src/"
         }
     },
+    "config": {
+        "policy": {
+            "advisories": {
+                "ignore": [
+                    "league/flysystem"
+                ]
+            }
+        }
+    },
     "extra": {
         "flarum-extension": {
             "title": "Fancybox",
