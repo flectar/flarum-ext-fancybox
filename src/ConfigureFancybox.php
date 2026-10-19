@@ -27,24 +27,6 @@ class ConfigureFancybox
             $tag->template = '<a data-fancybox="gallery" href="{@src}"><img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" /></a>';
         }
 
-        if ($config->tags->exists('IMG')) {
-            $tag = $config->tags->get('IMG');
-            $tag->template = <<<'XML'
-                <xsl:choose>
-                    <xsl:when test="parent::FANCYBOX-GALLERY-ITEM">
-                        <a data-fancybox="gallery" href="{@src}">
-                            <img data-lazy-src="{@src}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="{@title|@alt}" />
-                        </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <a data-fancybox="single" href="{@src}">
-                            <img src="{@src}" alt="{@title|@alt}" loading="lazy"/>
-                        </a>
-                    </xsl:otherwise>
-                </xsl:choose>
-XML;
-        }
-
         if ($config->tags->exists('UPL-IMAGE-PREVIEW')) {
             $tag = $config->tags->get('UPL-IMAGE-PREVIEW');
             $tag->template = <<<'XML'
