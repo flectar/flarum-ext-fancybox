@@ -38,12 +38,13 @@ export function listenForClicks() {
     // Let the browser handle new-tab clicks; a drag in a carousel cancels its own click.
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
-    const trigger = (e.target as Element | null)?.closest<HTMLElement>('a[data-fancybox]');
+    // Only post content: a theme or another extension may use `data-fancybox` for its own lightbox.
+    const trigger = (e.target as Element | null)?.closest<HTMLElement>('.Post-body a[data-fancybox]');
     if (!trigger) return;
 
     e.preventDefault();
 
-    const group = Array.from(document.querySelectorAll<HTMLElement>(`a[data-fancybox="${CSS.escape(trigger.dataset.fancybox!)}"]`));
+    const group = Array.from(document.querySelectorAll<HTMLElement>(`.Post-body a[data-fancybox="${CSS.escape(trigger.dataset.fancybox!)}"]`));
 
     load().then(
       ({ Fancybox }) => Fancybox.fromNodes(group, { ...fancyboxOptions, startIndex: group.indexOf(trigger) }),
