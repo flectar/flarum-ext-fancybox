@@ -14,6 +14,6 @@ jobs:
       frontend_directory: ./js
       backend_directory: .
       js_package_manager: npm
-      main_git_branch: v2
+      main_git_branch: 2.x
       # The build also refreshes the vendored Fancyapps CSS in less/, so commit it with js/dist.
       commit_all_dirty: true
