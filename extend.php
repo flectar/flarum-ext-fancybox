@@ -17,10 +17,8 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/less/forum.less'),
-    
-    (new Extend\ServiceProvider())
-        ->register(FancyboxServiceProvider::class),
-        
+
     (new Extend\Formatter)
+        ->configure(ConfigureFancybox::class)
         ->render(WrapImagesInGallery::class),
 ];
