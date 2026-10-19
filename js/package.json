@@ -4,21 +4,25 @@
   "private": true,
   "prettier": "@flarum/prettier-config",
   "dependencies": {
-    "@fancyapps/ui": "^6.1.0"
+    "@fancyapps/ui": "^6.1.15"
   },
   "devDependencies": {
+    "@flarum/jest-config": "^2.0.2",
     "@flarum/prettier-config": "^1.0.0",
     "flarum-tsconfig": "^2.0.0",
     "flarum-webpack-config": "^3.0.6",
     "prettier": "^3.3.3",
+    "typescript": "^4.9.5",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
   },
   "scripts": {
     "dev": "npm run sync-css && webpack --mode development --watch",
     "build": "npm run sync-css && webpack --mode production",
-    "sync-css": "cp node_modules/@fancyapps/ui/dist/fancybox/fancybox.css node_modules/@fancyapps/ui/dist/carousel/carousel.css ../less/",
-    "format": "prettier --write src",
-    "format-check": "prettier --check src"
+    "sync-css": "cp node_modules/@fancyapps/ui/dist/fancybox/fancybox.css node_modules/@fancyapps/ui/dist/carousel/carousel.css node_modules/@fancyapps/ui/dist/carousel/carousel.arrows.css ../less/",
+    "format": "prettier --write src tests",
+    "format-check": "prettier --check src tests",
+    "check-typings": "tsc --noEmit --emitDeclarationOnly false",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   }
 }

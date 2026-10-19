@@ -23,11 +23,6 @@
     "require": {
         "flarum/core": "^2.0"
     },
-    "autoload": {
-        "psr-4": {
-            "Flectar\\Fancybox\\": "src/"
-        }
-    },
     "extra": {
         "branch-alias": {
             "dev-v2": "3.x-dev"

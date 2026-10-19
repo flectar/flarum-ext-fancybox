@@ -1,91 +1,47 @@
 import app from 'flarum/forum/app';
-import { extend } from 'flarum/common/extend';
-import CommentPost from 'flarum/forum/components/CommentPost';
-import DiscussionListItem from 'flarum/forum/components/DiscussionListItem';
-import Discussion from 'flarum/common/models/Discussion';
-import Model from 'flarum/common/Model';
-import { Carousel, Fancybox } from '@fancyapps/ui';
+import { extend, override } from 'flarum/common/extend';
+import Comment from 'flarum/forum/components/Comment';
+import prepareContent from './prepareContent';
+import { listenForClicks, refreshCarousels } from './lightbox';
+
+/** The prepared HTML for each comment, so it is only rebuilt when the post content changes. */
+const prepared = new WeakMap<Comment, { source: string; html: string; group: string }>();
+let groups = 0;
 
 app.initializers.add('flectar/flarum-fancybox', () => {
-  const fancyboxOptions = {
-    Carousel: {
-      infinite: false,
-      preload: 1,
-    },
-    Toolbar: {
-      display: {
-        left: ['infobar'],
-        middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-        right: ['slideshow', 'close'],
-      },
-    },
-    Images: {
-      zoom: true,
-    },
-    dragToClose: true,
-    Hash: false,
-  };
+  // Core has no hook to transform post HTML before view() renders it, so swap the attr in and call the original.
+  // A `Comment#contentHtml()` method is planned for core 2.1; extend that instead once it exists.
+  override(Comment.prototype, 'view', function (this: Comment, original) {
+    const source = this.attrs.contentHtml;
 
-  const singleImageOptions = {
-    Toolbar: {
-      display: {
-        left: ['infobar'],
-        middle: ['rotateCCW', 'rotateCW', 'flipX', 'flipY'],
-        right: ['close'],
-      },
-    },
-    Images: {
-      zoom: true,
-    },
-    dragToClose: true,
-    Hash: false,
-  };
+    if (source && !this.attrs.isEditing) {
+      let entry = prepared.get(this);
 
-  const carouselOptions = {
-    Dots: false,
-    infinite: false,
-    dragFree: false,
-    preload: 1,
-  };
+      if (!entry || entry.source !== source) {
+        const group = entry?.group ?? `post-${++groups}`;
+        let html = source;
 
-  function initializeFancybox(container: JQuery) {
-    container
-      .children('.fancybox-gallery:not(.fancybox-ready)')
-      .addClass('fancybox-ready')
-      .each((_, gallery) => {
-        Carousel(gallery, carouselOptions).init();
-        Fancybox.bind(gallery, '[data-fancybox="gallery"]', fancyboxOptions);
-      });
+        try {
+          html = prepareContent(source, group);
+        } catch (error) {
+          // override() swallows errors and would render an empty post, so fall back to the original content.
+          console.error(error);
+        }
 
-    if (container.find('a[data-fancybox="single"]:not(.fancybox-ready)').length > 0) {
-      container.find('a[data-fancybox="single"]').addClass('fancybox-ready');
-      Fancybox.bind(container[0], '[data-fancybox="single"]', singleImageOptions);
+        entry = { source, html, group };
+        prepared.set(this, entry);
+      }
+
+      this.attrs.contentHtml = entry.html;
     }
-  }
 
-  extend(CommentPost.prototype, 'refreshContent', function () {
-    if (this.isEditing()) return;
-
-    const postBody = this.$('.Post-body');
-    if (postBody.length === 0) return;
-
-    initializeFancybox(postBody);
+    return original();
   });
 
-  Discussion.prototype.excerpt = Model.attribute<string>('excerpt');
+  extend(Comment.prototype, ['oncreate', 'onupdate'], refreshCarousels);
 
-  extend(DiscussionListItem.prototype, 'infoItems', function (items) {
-    const excerpt = this.attrs.discussion.excerpt();
-    if (excerpt) {
-      items.remove('excerpt');
-      items.add('excerpt', m.trust(excerpt), -100);
-    }
-  });
+  // onremove runs before Mithril detaches the DOM, so check once it has gone.
+  extend(Comment.prototype, 'onremove', () => setTimeout(refreshCarousels));
 
-  extend(DiscussionListItem.prototype, 'oncreate', function () {
-    const excerptBody = this.$('.item-excerpt');
-    if (excerptBody.length === 0) return;
-
-    initializeFancybox(excerptBody);
-  });
+  listenForClicks();
 });

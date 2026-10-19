@@ -16,11 +16,6 @@ use Flarum\Extend;
 return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
+        ->jsDirectory(__DIR__.'/js/dist/forum')
         ->css(__DIR__.'/less/forum.less'),
-    
-    (new Extend\ServiceProvider())
-        ->register(FancyboxServiceProvider::class),
-        
-    (new Extend\Formatter)
-        ->render(WrapImagesInGallery::class),
 ];
