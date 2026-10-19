@@ -10,8 +10,8 @@ Opens images in posts in a touch-friendly, zoomable [Fancybox](https://fancyapps
 
 | Extension version | Flarum version | Branch |
 |---|---|---|
-| 3.x | 2.x | `v2` |
-| 2.x | 1.x | `main` |
+| 3.x | 2.x | `2.x` |
+| 2.x | 1.x | `1.x` |
 
 ## Installation
 

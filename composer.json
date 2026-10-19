@@ -24,9 +24,6 @@
         "flarum/core": "^2.0"
     },
     "extra": {
-        "branch-alias": {
-            "dev-v2": "3.x-dev"
-        },
         "flarum-extension": {
             "title": "Fancybox",
             "category": "feature",
