@@ -26,8 +26,17 @@
     max-height: 70vh;
   }
 
-  // Until the library has loaded, show the first image rather than a stack of all of them.
-  &:not(.is-ready) > .f-carousel__slide:not(:first-child) {
-    display: none;
+  // Until the library has loaded, stack the slides in one cell as the carousel will, showing only the first.
+  // The gallery then already has its final height (that of the tallest image), so nothing moves when it starts.
+  &:not(.is-ready) {
+    display: grid;
+
+    > .f-carousel__slide {
+      grid-area: 1 / 1;
+    }
+
+    > .f-carousel__slide:not(:first-child) {
+      visibility: hidden;
+    }
   }
 }
