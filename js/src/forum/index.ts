@@ -13,9 +13,10 @@ app.initializers.add('flectar/flarum-fancybox', () => {
   function initFancybox(container) {
     if (!container || container.length === 0) return;
 
+    // flarum/emoji renders emoji as images too; those stay inline.
     container
       .find('img')
-      .not('.fancybox-gallery img, a > img')
+      .not('.fancybox-gallery img, a img, img.emoji')
       .each(function () {
         const $img = $(this);
         const src = $img.attr('src');
