@@ -75,6 +75,23 @@ describe('prepareContent: single images', () => {
     expect(out.querySelector('[data-fancybox]')).toBeNull();
   });
 
+  it('leaves Flamoji custom emoji alone', () => {
+    // Flamoji's emoticon template, whitespace included.
+    const flamoji = (name: string) =>
+      `<span class="flamoji" data-flamoji-category="Animated">\n  <img src="http://a/assets/emojis/${name}.gif" alt="${name}">\n</span>`;
+    const html = `<p>Hi ${flamoji('wave')}${flamoji('smile')}<br>\n${flamoji('fly')}</p>`;
+
+    expect(prepareContent(html, GROUP)).toBe(html);
+  });
+
+  it('leaves images alone that opt out, or sit in an element that does', () => {
+    const html =
+      '<p><img src="http://a/1.png" data-fancybox-ignore=""> <span data-fancybox-ignore=""><img src="http://a/2.png"></span></p>' +
+      `<div data-fancybox-ignore="">${upload('http://a/o.png', 'http://a/t.webp')}</div>`;
+
+    expect(prepare(html).querySelector('[data-fancybox]')).toBeNull();
+  });
+
   it('tells the lightbox every trigger is an image, whatever its URL looks like', () => {
     const out = prepare(`<p><img src="http://a/avatar.php?id=3"> ${upload('http://a/doc.html', 'http://a/t.webp')}</p>`);
     const types = Array.from(out.querySelectorAll('a[data-fancybox]')).map((a) => a.getAttribute('data-type'));
@@ -119,10 +136,60 @@ describe('prepareContent: galleries', () => {
     expect(slides[1].querySelector('a[data-fancybox]')!.getAttribute('href')).toBe('http://a/2.png');
   });
 
-  it('gives adjacent and space-separated images a slide each', () => {
-    const out = prepare('<p><img src="http://a/1.png"><img src="http://a/2.png"> <img src="http://a/3.png"></p>');
+  it('gives each image on its own line a slide', () => {
+    const out = prepare('<p><img src="http://a/1.png"><br>\n<img src="http://a/2.png"><br>\n<img src="http://a/3.png"></p>');
 
     expect(out.querySelectorAll('.f-carousel__slide')).toHaveLength(3);
+  });
+
+  it('keeps images directly next to each other inline, as they look the same as a row', () => {
+    const out = prepare('<p><img src="http://a/1.png"><img src="http://a/2.png"></p>');
+
+    expect(out.querySelector('.fancybox-gallery')).toBeNull();
+    expect(out.querySelectorAll('p > a[data-fancybox]')).toHaveLength(2);
+  });
+
+  it('keeps a row of space-separated images, like badges, side by side', () => {
+    const html =
+      '<p><img src="https://img.shields.io/badge/build-passing-brightgreen" alt=""> <img src="https://img.shields.io/badge/license-MIT-blue" alt=""> <img src="https://img.shields.io/badge/flarum-2.x-orange" alt=""></p>';
+    const out = prepare(html);
+
+    expect(out.querySelector('.fancybox-gallery')).toBeNull();
+    expect(out.querySelectorAll('p > a[data-fancybox]')).toHaveLength(3);
+  });
+
+  it('does not put a row in a carousel with the images on the lines around it', () => {
+    const row = '<img src="http://a/2.png"> <img src="http://a/3.png">';
+    const touching = prepare('<p><img src="http://a/1.png"><br>\n<img src="http://a/2.png"><img src="http://a/3.png"></p>');
+    const above = prepare(`<p><img src="http://a/1.png"><br>\n${row}</p>`);
+    const below = prepare(`<p>${row}<br>\n<img src="http://a/4.png"></p>`);
+
+    expect(above.querySelector('.fancybox-gallery')).toBeNull();
+    expect(below.querySelector('.fancybox-gallery')).toBeNull();
+    expect(touching.querySelector('.fancybox-gallery')).toBeNull();
+  });
+
+  it('ends a carousel at a row, keeping the row after it', () => {
+    const out = prepare(
+      '<p><img src="http://a/1.png"><br>\n<img src="http://a/2.png"><br>\n<img src="http://a/3.png"> <img src="http://a/4.png"></p>'
+    );
+    const children = Array.from(out.children);
+
+    expect(children.map((c) => c.tagName)).toEqual(['DIV', 'P']);
+    expect(children[0].querySelectorAll('.f-carousel__slide')).toHaveLength(2);
+    expect(children[1].querySelectorAll('a[data-fancybox]')).toHaveLength(2);
+  });
+
+  it('ignores whitespace at either end of a line', () => {
+    const out = prepare('<p><img src="http://a/1.png"> <br>\n <img src="http://a/2.png"></p>');
+
+    expect(out.querySelectorAll('.f-carousel__slide')).toHaveLength(2);
+  });
+
+  it('does not group an image at the end of a sentence with the next line', () => {
+    const out = prepare('<p>Look at this <img src="http://a/1.png"><br>\n<img src="http://a/2.png"></p>');
+
+    expect(out.querySelector('.fancybox-gallery')).toBeNull();
   });
 
   it('splits the paragraph around the gallery, keeping text before and after', () => {
@@ -170,7 +237,9 @@ describe('prepareContent: galleries', () => {
   });
 
   it('survives being parsed again unchanged', () => {
-    const once = prepareContent('<p>Hi<br><img src="http://a/1.png"><img src="http://a/2.png"></p><p><img src="http://a/3.png"></p>', GROUP);
+    const once = prepareContent('<p>Hi<br><img src="http://a/1.png"><br><img src="http://a/2.png"></p><p><img src="http://a/3.png"></p>', GROUP);
+
+    expect(parse(once).querySelector('.fancybox-gallery')).not.toBeNull();
 
     expect(parse(once).innerHTML).toBe(once);
   });
