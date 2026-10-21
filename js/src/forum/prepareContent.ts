@@ -10,13 +10,26 @@ const WEB_URL = /^(https?:|\/)/i;
 /** Containers a block-level gallery may sit in directly; anywhere else it would be invalid HTML. */
 const FLOW_CONTAINERS = new Set(['DIV', 'BLOCKQUOTE', 'LI', 'TD', 'TH', 'DD', 'DETAILS', 'SECTION', 'ARTICLE', 'ASIDE', 'FIGURE']);
 
+/** Lets a theme or another extension keep an image, or everything inside an element, out of the lightbox. */
+const OPTED_OUT = '[data-fancybox-ignore], [data-fancybox-ignore] *';
+
+/**
+ * Images that stay plain, besides those opted out:
+ *
+ * - an author's link already says where the image goes;
+ * - an inline spoiler reveals itself on click, which would open the lightbox at the same time;
+ * - Flamoji's custom emoji (`<span class="flamoji"><img></span>`) are inline text, like core's `img.emoji`.
+ */
+const PLAIN_IMAGE_CONTAINERS = 'a, span.spoiler, span.flamoji';
+
 /**
  * Prepare rendered post HTML for the lightbox:
  *
  * - every image that isn't already inside an author's link opens in the
  *   lightbox, as does every fof/upload image preview;
- * - two or more of those in a row (separated by nothing but whitespace or line
- *   breaks) become a carousel.
+ * - two or more of those on consecutive lines, each alone on its line, become a
+ *   carousel. Images that share a line with each other (a row of badges, say)
+ *   or with text are meant to be seen in place, so they stay as they are.
  *
  * All triggers share the `data-fancybox` value `group`, so the lightbox can page
  * through every image in the post.
@@ -34,7 +47,7 @@ export default function prepareContent(html: string, group: string): string {
   let found = false;
 
   root.querySelectorAll<HTMLAnchorElement>(UPLOAD_PREVIEW_LINK).forEach((link) => {
-    if (!WEB_URL.test(link.getAttribute('href') || '')) return;
+    if (!WEB_URL.test(link.getAttribute('href') || '') || link.matches(OPTED_OUT)) return;
 
     markTrigger(link, group);
     found = true;
@@ -43,8 +56,7 @@ export default function prepareContent(html: string, group: string): string {
   root.querySelectorAll('img').forEach((img) => {
     const src = img.getAttribute('src');
 
-    // An inline spoiler reveals itself on click, which would open the lightbox at the same time.
-    if (!src || !WEB_URL.test(src) || img.classList.contains('emoji') || img.closest('a, span.spoiler')) return;
+    if (!src || !WEB_URL.test(src) || img.classList.contains('emoji') || img.matches(OPTED_OUT) || img.closest(PLAIN_IMAGE_CONTAINERS)) return;
 
     const link = document.createElement('a');
     link.setAttribute('href', src);
@@ -60,17 +72,10 @@ export default function prepareContent(html: string, group: string): string {
   const grouped = new Set<HTMLElement>();
 
   for (const trigger of triggers) {
-    if (grouped.has(trigger)) continue;
+    // A trigger partway along a line shares it with text or another image, so it stays inline.
+    if (grouped.has(trigger) || !startsLine(trigger)) continue;
 
-    const run = [trigger];
-    let node = trigger.nextSibling;
-
-    while (node) {
-      if (isTrigger(node)) run.push(node);
-      else if (!isSeparator(node)) break;
-
-      node = node.nextSibling;
-    }
+    const run = collectRun(trigger);
 
     run.forEach((t) => grouped.add(t));
 
@@ -86,8 +91,53 @@ function markTrigger(link: HTMLElement, group: string) {
   link.setAttribute('data-type', 'image');
 }
 
+function isLineBreak(node: Node): boolean {
+  return node instanceof HTMLElement && node.tagName === 'BR';
+}
+
+function isWhitespace(node: Node): boolean {
+  return node.nodeType === Node.TEXT_NODE && !node.textContent!.trim();
+}
+
 function isSeparator(node: Node): boolean {
-  return (node.nodeType === Node.TEXT_NODE && !node.textContent!.trim()) || (node instanceof HTMLElement && node.tagName === 'BR');
+  return isWhitespace(node) || isLineBreak(node);
+}
+
+/** Whether nothing but whitespace comes before the node on its line. */
+function startsLine(node: Node): boolean {
+  let prev = node.previousSibling;
+
+  while (prev && isWhitespace(prev)) prev = prev.previousSibling;
+
+  return !prev || isLineBreak(prev);
+}
+
+/**
+ * The triggers on the lines starting with `first`, up to the first line that
+ * holds anything but a single trigger. Blank lines don't end the run.
+ */
+function collectRun(first: HTMLElement): HTMLElement[] {
+  const run: HTMLElement[] = [];
+  let current: HTMLElement | null = null;
+  let node: ChildNode | null = first;
+
+  while (true) {
+    if (!node || isLineBreak(node)) {
+      if (current) run.push(current);
+      if (!node) break;
+
+      current = null;
+    } else if (isTrigger(node) && !current) {
+      current = node;
+    } else if (!isWhitespace(node)) {
+      // Another image or some text on the line: it is meant to be seen as it is.
+      break;
+    }
+
+    node = node.nextSibling;
+  }
+
+  return run;
 }
 
 function hasContent(node: Node): boolean {
